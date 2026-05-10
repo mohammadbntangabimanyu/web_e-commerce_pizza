@@ -86,41 +86,22 @@ scatterData.forEach(({ id, tx, ty, rot }) => {
 });
 
 /* ─────────────────────────────────────────────────────────────
-   4. MENU — HORIZONTAL PINNED SCROLL + PIZZA ROLLING
+   MENU PIZZA BERPUTAR SAAT DI-SCROLL SAMPING
 ───────────────────────────────────────────────────────────── */
-function setupHorizontalScroll() {
-  const track  = document.getElementById('menu-track');
-  if (!track) return;
-  const amount = track.scrollWidth - window.innerWidth + 80;
+const menuContainer = document.querySelector('.menu-scroll-container');
+// KITA UBAH TARGETNYA MENJADI BUNGKUS GAMBARNYA (.pizza-img-wrap)
+const pizzaWraps = document.querySelectorAll('.pizza-img-wrap');
 
-  gsap.to(track, {
-    x: -amount,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#menu',
-      start: 'top top',
-      end: () => `+=${amount + 200}`,
-      pin: true,
-      scrub: 1,
-      anticipatePin: 1,
-    },
+if (menuContainer) {
+  menuContainer.addEventListener('scroll', () => {
+    let scrollAmount = menuContainer.scrollLeft;
+    
+    // Terapkan putaran ke bungkus gambar pizza
+    pizzaWraps.forEach(wrap => {
+      wrap.style.transform = `rotate(${scrollAmount * 0.05}deg)`;
+    });
   });
 }
-setupHorizontalScroll();
-
-document.querySelectorAll('.pizza-rolling-img').forEach(img => {
-  gsap.to(img, {
-    rotation: 360,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: '#menu',
-      start: 'top top',
-      end: '+=3000',
-      scrub: true,
-    },
-  });
-});
-
 /* ─────────────────────────────────────────────────────────────
    5. SECTION REVEALS — fade in saat masuk viewport
 ───────────────────────────────────────────────────────────── */
