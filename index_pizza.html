@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonucini Pizzeria</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header id="header">
+    <!-- KIRI: hamburger + logo -->
+    <div class="header-left">
+      <button class="hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="logo">BONU<span>CINI</span><sub>PIZZERIA</sub></div>
+    </div>
+
+    <!-- KANAN: search, order types, cart -->
+    <div class="header-right">
+      <button class="icon-btn" onclick="toggleSearch()" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span>Search</span>
+      </button>
+
+      <div class="order-types">
+        <button class="order-btn active" onclick="setOrderType(this)" data-type="dine-in">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          Dine In
+        </button>
+        <button class="order-btn" onclick="setOrderType(this)" data-type="take-away">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+          Take Away
+        </button>
+        <button class="order-btn" onclick="setOrderType(this)" data-type="delivery">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Delivery
+        </button>
+      </div>
+
+      <!-- CART — paling kanan -->
+      <button class="cart-btn" onclick="openModal('cart-modal')" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        CART <span class="cart-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Search Bar — muncul di bawah header -->
+  <div class="search-bar" id="search-bar">
+    <input type="text" placeholder="Search pizza, sides, drinks..." id="search-input" autocomplete="off">
+    <button onclick="toggleSearch()" aria-label="Close search">✕</button>
+  </div>
+
+  <!-- ── DRAWER / SIDEBAR ── -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="toggleDrawer()"></div>
+  <nav class="drawer" id="drawer">
+    <button class="drawer-close" onclick="toggleDrawer()">✕</button>
+    <div class="drawer-logo">BONU<span>CINI</span></div>
+    <ul class="drawer-links">
+      <li><a href="#hero"         onclick="toggleDrawer()">Home</a></li>
+      <li><a href="#menu"         onclick="toggleDrawer()">Shop</a></li>
+      <li><a href="#custom-pizza" onclick="toggleDrawer()">Build Pizza</a></li>
+      <li><a href="#about"        onclick="toggleDrawer()">About Us</a></li>
+      <li><a href="#contact"      onclick="toggleDrawer()">Contact</a></li>
+    </ul>
+    <div class="drawer-socials">
+      <a href="#" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="#" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="#" aria-label="Twitter/X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+    </div>
+  </nav>
+
+
+  <!-- ── HERO SECTION ── -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+
+    <!-- Teks utama di tengah atas -->
+    <div class="hero-text" id="hero-text">
+      <span class="tagline">Authentic Italian Taste</span>
+      <h1>Blaterian-Eng<br><em>Presentation</em></h1>
+      <p>Hand-crafted pizzas, made fresh daily<br>with the finest Italian ingredients</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Order Now</button>
+        <button class="btn-outline" onclick="document.getElementById('custom-pizza').scrollIntoView({behavior:'smooth'})">Build Your Pizza</button>
+      </div>
+    </div>
+
+    <!-- Bumbu-bumbu di bagian bawah hero -->
+    <div class="hero-ingredients" id="hero-ingredients">
+      <div class="ingredient ing-chili"      id="ing-chili">
+        <img src="aset_pizza_web/hero_aset/cilly_powder.png" alt="Chili">
+      </div>
+      <div class="ingredient ing-flour"      id="ing-flour">
+        <img src="aset_pizza_web/hero_aset/flour.png" alt="Flour">
+      </div>
+      <div class="ingredient ing-egg"        id="ing-egg">
+        <img src="aset_pizza_web/hero_aset/six_egg.png" alt="Eggs">
+      </div>
+      <div class="ingredient ing-sauce"      id="ing-sauce">
+        <img src="aset_pizza_web/hero_aset/tomato_sauce.png" alt="Sauce">
+      </div>
+      <div class="ingredient ing-board"      id="ing-board">
+        <img src="aset_pizza_web/hero_aset/dough_cutting_board.png" alt="Board">
+      </div>
+      <div class="ingredient ing-dough"      id="ing-dough">
+        <img src="aset_pizza_web/hero_aset/dough_ball.png" alt="Dough">
+      </div>
+      <div class="ingredient ing-mozzarella" id="ing-mozzarella">
+        <img src="aset_pizza_web/hero_aset/mozarella_tomato.png" alt="Mozzarella">
+      </div>
+      <div class="ingredient ing-leaf"       id="ing-leaf">
+        <img src="aset_pizza_web/hero_aset/tomato_leaf.png" alt="Basil">
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <svg width="16" height="24" viewBox="0 0 16 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="1" y="1" width="14" height="22" rx="7"/>
+        <line x1="8" y1="6" x2="8" y2="10"/>
+      </svg>
+    </div>
+  </section>
+
+
+  <!-- ── CUSTOM PIZZA ── -->
+  <section id="custom-pizza">
+    <div style="max-width:1100px;margin:0 auto">
+      <div class="section-header">
+        <span class="eyebrow">Build Your Own</span>
+        <h2>Your Pizza, <em style="font-style:italic;color:var(--orange)">Your Way</em></h2>
+        <p>Pilih topping favoritmu dan ciptakan kombinasi pizza sempurnamu</p>
+      </div>
+    </div>
+    <div class="custom-inner">
+      <div class="pizza-canvas-wrap">
+        <div class="pizza-glow"></div>
+        <div class="pizza-canvas" id="pizza-canvas">
+          <img class="pizza-layer visible"  id="layer-base"      src="aset_pizza_web/menu_custom/base_menu.png"      alt="Base">
+          <img class="pizza-layer hidden"   id="layer-tomato"    src="aset_pizza_web/menu_custom/tomato_menu.png"    alt="Tomato">
+          <img class="pizza-layer hidden"   id="layer-mushroom"  src="aset_pizza_web/menu_custom/mushroom_menu.png"  alt="Mushroom">
+          <img class="pizza-layer hidden"   id="layer-papperoni" src="aset_pizza_web/menu_custom/papperoni_menu.png" alt="Pepperoni">
+          <img class="pizza-layer hidden"   id="layer-nanas"     src="aset_pizza_web/menu_custom/nanas_menu.png"     alt="Pineapple">
+          <img class="pizza-layer hidden"   id="layer-leaf"      src="aset_pizza_web/menu_custom/leaf_menu.png"      alt="Basil">
+        </div>
+      </div>
+      <div class="custom-controls">
+        <h3>Customize Your Pizza</h3>
+        <p>Klik topping untuk menambahkannya ke pizzamu</p>
+        <div class="topping-grid">
+          <button class="topping-btn" data-layer="layer-tomato"    data-price="8000"  onclick="toggleTopping(this)">
+            <img class="topping-img" src="aset_pizza_web/menu_custom/tomato_menu.png" alt="">
+            <div class="topping-info"><span class="t-name">Tomato Sauce</span><span class="t-price">+ Rp 8.000</span></div>
+            <div class="topping-check"></div>
+          </button>
+          <button class="topping-btn" data-layer="layer-mushroom"  data-price="12000" onclick="toggleTopping(this)">
+            <img class="topping-img" src="aset_pizza_web/menu_custom/mushroom_menu.png" alt="">
+            <div class="topping-info"><span class="t-name">Mushroom</span><span class="t-price">+ Rp 12.000</span></div>
+            <div class="topping-check"></div>
+          </button>
+          <button class="topping-btn" data-layer="layer-papperoni" data-price="15000" onclick="toggleTopping(this)">
+            <img class="topping-img" src="aset_pizza_web/menu_custom/papperoni_menu.png" alt="">
+            <div class="topping-info"><span class="t-name">Pepperoni</span><span class="t-price">+ Rp 15.000</span></div>
+            <div class="topping-check"></div>
+          </button>
+          <button class="topping-btn" data-layer="layer-nanas"     data-price="10000" onclick="toggleTopping(this)">
+            <img class="topping-img" src="aset_pizza_web/menu_custom/nanas_menu.png" alt="">
+            <div class="topping-info"><span class="t-name">Pineapple</span><span class="t-price">+ Rp 10.000</span></div>
+            <div class="topping-check"></div>
+          </button>
+          <button class="topping-btn" data-layer="layer-leaf"      data-price="7000"  onclick="toggleTopping(this)">
+            <img class="topping-img" src="aset_pizza_web/menu_custom/leaf_menu.png" alt="">
+            <div class="topping-info"><span class="t-name">Fresh Basil</span><span class="t-price">+ Rp 7.000</span></div>
+            <div class="topping-check"></div>
+          </button>
+        </div>
+        <div class="price-row">
+          <div>
+            <div class="label">Total harga</div>
+            <div style="font-size:.73rem;color:rgba(245,237,224,.38);margin-top:2px">Base + topping dipilih</div>
+          </div>
+          <div class="price-total" id="custom-price">Rp 45.000</div>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="addCustomToCart()">Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── MENU (Horizontal Scroll) ── -->
+  <section id="menu">
+    <div class="menu-header-wrap">
+      <div class="section-header">
+        <span class="eyebrow">Signature Pizzas</span>
+        <h2>Our Menu</h2>
+        <p>Resep klasik yang disempurnakan turun-temurun</p>
+      </div>
+    </div>
+    <div class="menu-scroll-container">
+      <div class="menu-track" id="menu-track">
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/cheese_pizza.png" alt="Cheese"></div>
+          <h3>Cheese Pizza</h3>
+          <p class="desc">Triple cheese: mozzarella, parmesan, cheddar di atas saus tomat</p>
+          <div class="card-footer"><span class="price">Rp 55.000</span>
+            <button class="add-btn" onclick="addToCart('Cheese Pizza',55000,'aset_pizza_web/daftar_menu/cheese_pizza.png')">+</button>
+          </div><span class="badge new">Popular</span>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/chiken_pizza.png" alt="Chicken"></div>
+          <h3>Chicken Pizza</h3>
+          <p class="desc">Ayam panggang, bawang karamel, paprika di atas saus krim putih</p>
+          <div class="card-footer"><span class="price">Rp 62.000</span>
+            <button class="add-btn" onclick="addToCart('Chicken Pizza',62000,'aset_pizza_web/daftar_menu/chiken_pizza.png')">+</button>
+          </div>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/margarita_pizza.png" alt="Margarita"></div>
+          <h3>Margarita</h3>
+          <p class="desc">Klasik Italia — saus tomat, mozzarella segar, basil harum</p>
+          <div class="card-footer"><span class="price">Rp 48.000</span>
+            <button class="add-btn" onclick="addToCart('Margarita',48000,'aset_pizza_web/daftar_menu/margarita_pizza.png')">+</button>
+          </div>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/meat_lover_pizza.png" alt="Meat Lover"></div>
+          <h3>Meat Lover</h3>
+          <p class="desc">Daging sapi, sosis, bacon, dan pepperoni melimpah</p>
+          <div class="card-footer"><span class="price">Rp 75.000</span>
+            <button class="add-btn" onclick="addToCart('Meat Lover',75000,'aset_pizza_web/daftar_menu/meat_lover_pizza.png')">+</button>
+          </div><span class="badge">Best Seller</span>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/mushroom_pizza.png" alt="Mushroom"></div>
+          <h3>Mushroom Pizza</h3>
+          <p class="desc">Jamur pilihan dengan truffle oil dan thyme segar</p>
+          <div class="card-footer"><span class="price">Rp 58.000</span>
+            <button class="add-btn" onclick="addToCart('Mushroom Pizza',58000,'aset_pizza_web/daftar_menu/mushroom_pizza.png')">+</button>
+          </div>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/paperoni_pizza.png" alt="Pepperoni"></div>
+          <h3>Pepperoni</h3>
+          <p class="desc">Pepperoni renyah berlimpah di atas mozzarella elastis</p>
+          <div class="card-footer"><span class="price">Rp 65.000</span>
+            <button class="add-btn" onclick="addToCart('Pepperoni',65000,'aset_pizza_web/daftar_menu/paperoni_pizza.png')">+</button>
+          </div>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/pineaple_pizza.png" alt="Pineapple"></div>
+          <h3>Pineapple Pizza</h3>
+          <p class="desc">Hawaiian manis-gurih dengan nanas segar menyegarkan</p>
+          <div class="card-footer"><span class="price">Rp 60.000</span>
+            <button class="add-btn" onclick="addToCart('Pineapple Pizza',60000,'aset_pizza_web/daftar_menu/pineaple_pizza.png')">+</button>
+          </div>
+        </div>
+
+        <div class="pizza-card">
+          <div class="pizza-img-wrap"><img class="pizza-rolling-img" src="aset_pizza_web/daftar_menu/vegan_pizza.png" alt="Vegan"></div>
+          <h3>Vegan Pizza</h3>
+          <p class="desc">Sayuran segar kebun, keju vegan, herb oil di kulit tipis renyah</p>
+          <div class="card-footer"><span class="price">Rp 52.000</span>
+            <button class="add-btn" onclick="addToCart('Vegan Pizza',52000,'aset_pizza_web/daftar_menu/vegan_pizza.png')">+</button>
+          </div><span class="badge new">Vegan</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── EXTRAS ── -->
+  <section id="extras">
+    <div class="extras-inner">
+      <div class="section-header">
+        <span class="eyebrow">Lengkapi Pesananmu</span>
+        <h2>Sides &amp; Drinks</h2>
+      </div>
+
+      <span class="sub-label">Makanan Pendamping</span>
+      <div class="extras-grid">
+
+        <div class="extra-card" onclick="addToCart('Chicken Wings',32000,'aset_pizza_web/menu_tambahan/chiken_wing.png')">
+          <div class="extra-img-wrap">
+            <img src="aset_pizza_web/menu_tambahan/chiken_wing.png" alt="Chicken Wings"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="info">
+            <h4>Chicken Wings</h4>
+            <div class="sub">6 pcs, crispy fried</div>
+            <div class="ep">Rp 32.000</div>
+          </div>
+        </div>
+
+        <div class="extra-card" onclick="addToCart('Garlic Bread',18000,'aset_pizza_web/menu_tambahan/garlic_bread.png')">
+          <div class="extra-img-wrap">
+            <img src="aset_pizza_web/menu_tambahan/garlic_bread.png" alt="Garlic Bread"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="info">
+            <h4>Garlic Bread</h4>
+            <div class="sub">With herb butter</div>
+            <div class="ep">Rp 18.000</div>
+          </div>
+        </div>
+
+        <div class="extra-card" onclick="addToCart('French Fries',22000,'aset_pizza_web/menu_tambahan/kentang_goreng.png')">
+          <div class="extra-img-wrap">
+            <img src="aset_pizza_web/menu_tambahan/kentang_goreng.png" alt="French Fries"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="info">
+            <h4>French Fries</h4>
+            <div class="sub">With dipping sauce</div>
+            <div class="ep">Rp 22.000</div>
+          </div>
+        </div>
+
+      </div>
+
+      <span class="sub-label" style="margin-top:20px">Minuman</span>
+      <div class="drinks-grid">
+
+        <div class="drink-card" onclick="addToCart('Ice Cola',15000,'aset_pizza_web/menu_minuman/ice_cola.png')">
+          <div class="drink-img-wrap">
+            <img src="aset_pizza_web/menu_minuman/ice_cola.png" alt="Ice Cola"
+                 onerror="this.style.display='none'">
+          </div>
+          <h4>Ice Cola</h4>
+          <div class="dp">Rp 15.000</div>
+        </div>
+
+        <div class="drink-card" onclick="addToCart('Ice Tea',12000,'aset_pizza_web/menu_minuman/ice_tea.png')">
+          <div class="drink-img-wrap">
+            <img src="aset_pizza_web/menu_minuman/ice_tea.png" alt="Ice Tea"
+                 onerror="this.style.display='none'">
+          </div>
+          <h4>Ice Tea</h4>
+          <div class="dp">Rp 12.000</div>
+        </div>
+
+        <div class="drink-card" onclick="addToCart('Ice Water',8000,'aset_pizza_web/menu_minuman/ice_water.png')">
+          <div class="drink-img-wrap">
+            <img src="aset_pizza_web/menu_minuman/ice_water.png" alt="Ice Water"
+                 onerror="this.style.display='none'">
+          </div>
+          <h4>Ice Water</h4>
+          <div class="dp">Rp 8.000</div>
+        </div>
+
+        <div class="drink-card" onclick="addToCart('Lemon Ice',14000,'aset_pizza_web/menu_minuman/lemon_ice.png')">
+          <div class="drink-img-wrap">
+            <img src="aset_pizza_web/menu_minuman/lemon_ice.png" alt="Lemon Ice"
+                 onerror="this.style.display='none'">
+          </div>
+          <h4>Lemon Ice</h4>
+          <div class="dp">Rp 14.000</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── ABOUT / CHEF ── -->
+  <section id="about">
+    <div class="about-inner">
+      <div class="about-text">
+        <span class="eyebrow">Our Head Chefs</span>
+        <h2>Passion Baked<br>Into Every Slice</h2>
+        <p>Chef-chef peraih penghargaan kami telah mendedikasikan karir mereka untuk menyempurnakan seni pizza Neapolitan. Setiap adonan diuleni tangan, setiap saus dimasak perlahan, setiap pizza dipanggang kayu hingga sempurna.</p>
+        <p>Dari perbukitan Naples hingga mejamu — kami menghadirkan cita rasa Italia autentik di setiap gigitan.</p>
+        <div class="chef-stats">
+          <div class="stat"><div class="num">15+</div><div class="lbl">Years Experience</div></div>
+          <div class="stat"><div class="num">8</div><div class="lbl">Awards Won</div></div>
+          <div class="stat"><div class="num">50k+</div><div class="lbl">Happy Customers</div></div>
+        </div>
+      </div>
+
+      <div class="chef-img-wrap">
+        <div class="chef-bg-circle"></div>
+        <img id="chef-img"
+             src="aset_pizza_web/head_chef/chef_cowo.png"
+             alt="Head Chef"
+             onerror="this.style.opacity='0.3'">
+        <div class="chef-badge">
+          <div class="cb-num">★ 4.9</div>
+          <div class="cb-txt">Chef Rating</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIX: tombol chef pakai id agar bisa set active state dengan benar -->
+    <div class="chef-toggle">
+      <button class="btn-primary chef-switch-btn active-chef" id="btn-marco"
+              onclick="switchChef('aset_pizza_web/head_chef/chef_cowo.png','btn-marco')">Chef Marco</button>
+      <button class="btn-outline chef-switch-btn" id="btn-sofia"
+              onclick="switchChef('aset_pizza_web/head_chef/chef_cewe.png','btn-sofia')">Chef Sofia</button>
+    </div>
+  </section>
+
+
+  <!-- ── CONTACT ── -->
+  <section id="contact">
+    <div class="contact-inner">
+      <div class="section-header">
+        <span class="eyebrow">Get In Touch</span>
+        <h2>Contact Us</h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="c-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div><strong>Alamat</strong><p>Jl. Pizza Italia No. 1, Jakarta Selatan</p></div>
+          </div>
+          <div class="c-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <div><strong>Telepon</strong><p>+62 21 1234 5678</p></div>
+          </div>
+          <div class="c-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <div><strong>Email</strong><p>hello@bonucini.com</p></div>
+          </div>
+          <div class="c-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div><strong>Jam Buka</strong><p>Senin–Minggu · 10:00 – 22:00 WIB</p></div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <input type="text"  placeholder="Nama Lengkap">
+          <input type="email" placeholder="Email Address">
+          <textarea           placeholder="Pesan kamu..."></textarea>
+          <button class="btn-primary">Kirim Pesan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="f-logo">BONU<span>CINI</span></div>
+        <p>Authentic Italian pizza, crafted with love and the finest ingredients since 2010.</p>
+        <div class="f-socials">
+          <a href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" aria-label="Pinterest">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.19-.809 1.279-5.423 1.279-5.423s-.327-.653-.327-1.62c0-1.519.883-2.657 1.981-2.657.935 0 1.388.702 1.388 1.545 0 .942-.599 2.352-.909 3.658-.259 1.094.546 1.985 1.62 1.985 1.943 0 3.244-2.048 3.244-5.007 0-2.618-1.883-4.448-4.572-4.448-3.114 0-4.943 2.336-4.943 4.752 0 .941.362 1.949.812 2.5a.326.326 0 01.075.312c-.083.345-.267 1.094-.303 1.247-.048.202-.16.244-.37.147-1.387-.646-2.254-2.676-2.254-4.311 0-3.509 2.55-6.732 7.35-6.732 3.858 0 6.858 2.749 6.858 6.419 0 3.83-2.414 6.908-5.764 6.908-1.126 0-2.186-.586-2.549-1.276l-.693 2.589c-.251.966-.929 2.175-1.384 2.911A10 10 0 1012 2z"/></svg>
+          </a>
+          <a href="#" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="#" aria-label="Twitter/X">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h5>Shop</h5>
+        <ul>
+          <li><a href="#menu">All Pizzas</a></li>
+          <li><a href="#custom-pizza">Build Your Pizza</a></li>
+          <li><a href="#extras">Sides &amp; Drinks</a></li>
+          <li><a href="#">Gift Cards</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Info</h5>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping &amp; Returns</a></li>
+          <li><a href="#">Store Policy</a></li>
+          <li><a href="#">Payment Methods</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Stockists</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-newsletter">
+        <h5>Newsletter</h5>
+        <p>Dapatkan promo eksklusif &amp; update menu terbaru</p>
+        <div class="nl-form">
+          <input type="email" placeholder="Enter your email here... *" id="nl-email">
+        </div>
+        <label class="nl-check">
+          <input type="checkbox" id="nl-agree">
+          <span>Yes, subscribe me to your newsletter.</span>
+        </label>
+        <button class="nl-btn" onclick="subscribeNewsletter()">SUBSCRIBE</button>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>©2025 by Bonucini Pizzeria. All rights reserved.</p>
+      <div class="pay-icons">
+        <span>CASH</span><span>QRIS</span><span>BANK</span>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ── CART MODAL ── -->
+  <div class="modal-overlay" id="cart-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🛒 Your Order</h3>
+        <button class="modal-close" onclick="closeModal('cart-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="cart-items-list">
+          <div class="cart-empty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <p>Keranjangmu kosong</p>
+            <p style="margin-top:4px;font-size:.78rem;opacity:.5">Tambahkan pizza favoritmu!</p>
+          </div>
+        </div>
+
+        <div class="cart-note">
+          <label>INSTRUKSI KHUSUS</label>
+          <textarea id="cart-note-text" placeholder="Misal: tanpa bawang, ekstra pedas, potong 8 bagian..."></textarea>
+        </div>
+
+        <!-- PAYMENT — 3 pilihan: Cash, QRIS, Bank -->
+        <div class="payment-section">
+          <label class="pay-label">METODE PEMBAYARAN</label>
+          <div class="pay-options">
+
+            <label class="pay-opt">
+              <input type="radio" name="payment" value="cash" checked>
+              <div class="pay-card">
+                <!-- Uang tunai icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/>
+                  <path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/>
+                  <line x1="12" y1="12" x2="12" y2="16"/>
+                  <line x1="10" y1="14" x2="14" y2="14"/>
+                </svg>
+                <span>Cash</span>
+              </div>
+            </label>
+
+            <label class="pay-opt">
+              <input type="radio" name="payment" value="qris">
+              <div class="pay-card">
+                <!-- Barcode / QR icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <path d="M14 14h2v2h-2zM18 14h3v2M14 18v3M18 18h3v3h-3z"/>
+                </svg>
+                <span>QRIS</span>
+              </div>
+            </label>
+
+            <label class="pay-opt">
+              <input type="radio" name="payment" value="bank">
+              <div class="pay-card">
+                <!-- Credit card icon -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="26" height="26">
+                  <rect x="1" y="4" width="22" height="16" rx="2"/>
+                  <line x1="1" y1="10" x2="23" y2="10"/>
+                  <line x1="5" y1="15" x2="9" y2="15"/>
+                  <line x1="12" y1="15" x2="15" y2="15"/>
+                </svg>
+                <span>Bank</span>
+              </div>
+            </label>
+
+          </div>
+        </div>
+
+        <div class="cart-total-row">
+          <span class="ct-label">Total</span>
+          <span class="ct-amount" id="cart-total">Rp 0</span>
+        </div>
+        <button class="btn-primary" style="width:100%" onclick="checkout()">Checkout →</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── PROGRESS MODAL ── -->
+  <div class="modal-overlay" id="progress-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>🍕 Tracking Pesanan</h3>
+        <button class="modal-close" onclick="closeModal('progress-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="order-meta">
+          <div class="order-id">Order #BON-<span id="order-num">0000</span></div>
+          <div class="order-pay" id="order-pay-label"></div>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-bar"></div>
+        </div>
+
+        <div class="progress-steps">
+          <div class="p-step" id="step-1">
+            <div class="p-icon">📋</div>
+            <div class="p-text"><h4>Pesanan Diterima</h4><p>Pesananmu telah dikonfirmasi</p></div>
+          </div>
+          <div class="p-step" id="step-2">
+            <div class="p-icon">👨‍🍳</div>
+            <div class="p-text"><h4>Pesanan Dibuat</h4><p>Chef sedang meracik pizzamu</p></div>
+          </div>
+          <div class="p-step" id="step-3">
+            <div class="p-icon">🔥</div>
+            <div class="p-text"><h4>Sedang Dipanggang</h4><p>Di dalam oven kayu, hampir siap!</p></div>
+          </div>
+          <div class="p-step" id="step-4">
+            <div class="p-icon" id="step4-icon">🛵</div>
+            <div class="p-text"><h4 id="step4-title">Sedang Diantar</h4><p id="step4-desc">Pesanan dalam perjalanan</p></div>
+          </div>
+          <div class="p-step" id="step-5">
+            <div class="p-icon" id="step5-icon">✅</div>
+            <div class="p-text"><h4 id="step5-title">Siap Dinikmati!</h4><p id="step5-desc">Selamat menikmati pizzamu 🎉</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ── TOAST ── -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ── CS FAB ── -->
+  <div class="cs-fab" id="cs-fab" onclick="toggleCS()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+      <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+      <circle cx="9"  cy="10" r=".8" fill="currentColor" stroke="none"/>
+      <circle cx="12" cy="10" r=".8" fill="currentColor" stroke="none"/>
+      <circle cx="15" cy="10" r=".8" fill="currentColor" stroke="none"/>
+    </svg>
+    <span class="cs-label">CS</span>
+    <div class="cs-badge"></div>
+  </div>
+
+  <div class="cs-popup" id="cs-popup">
+    <div class="cs-popup-header">
+      <div class="cs-avatar">👨‍🍳</div>
+      <div>
+        <div class="cs-name">Bonucini Support</div>
+        <div class="cs-status"><span class="cs-dot"></span> Online</div>
+      </div>
+      <button onclick="toggleCS()">✕</button>
+    </div>
+    <div class="cs-messages" id="cs-messages">
+      <div class="cs-msg bot"><span>Halo! Selamat datang di Bonucini Pizzeria 🍕 Ada yang bisa kami bantu?</span></div>
+    </div>
+    <div class="cs-quick-btns">
+      <button onclick="csQuick('Cek status pesanan')">Cek status pesanan</button>
+      <button onclick="csQuick('Menu dan harga')">Menu &amp; harga</button>
+      <button onclick="csQuick('Jam operasional')">Jam operasional</button>
+    </div>
+    <div class="cs-input-row">
+      <input type="text" id="cs-input" placeholder="Tulis pesan..." onkeydown="if(event.key==='Enter')csSend()">
+      <button onclick="csSend()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
