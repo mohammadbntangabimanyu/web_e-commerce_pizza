@@ -394,7 +394,34 @@ header.scrolled { box-shadow:0 4px 28px rgba(0,0,0,.5); }
 .stat .lbl { font-size:.73rem; color:rgba(245,237,224,.5); margin-top:4px; }
 
 .chef-img-wrap { position:relative; display:flex; align-items:flex-end; justify-content:center; min-height:380px; }
-.chef-bg-circle { position:absolute; width:320px; height:320px; border-radius:50%; background:radial-gradient(circle,rgba(212,98,26,.15),transparent 70%); bottom:0; left:50%; transform:translateX(-50%); }
+
+
+.chef-bg-circle { 
+  position: absolute; 
+  width: 320px; 
+  height: 320px; 
+  border-radius: 50%; 
+  
+  /* 1. UBAH ANGKA 0.3 MENJADI LEBIH BESAR (misal: 0.5 atau 0.6) 
+     Ini akan membuat warna dasar lingkaran lebih pekat dan terang */
+  background: radial-gradient(circle, rgba(212,98,26,0.5), transparent 70%); 
+  
+  /* 2. UBAH ANGKA 0.15 MENJADI 0.3 ATAU 0.4 
+     Ini akan membuat pancaran cahaya/glow di sekitarnya jauh lebih terang */
+  box-shadow: 0 0 80px 30px rgba(212,98,26,0.35);
+  
+  bottom: 0; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  animation: chef-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes chef-glow {
+  /* 3. UBAH OPACITY DARI 0.6 MENJADI 0.8 
+     Agar saat cahaya sedang meredup (bernapas), cahayanya tidak terlalu gelap */
+  0% { opacity: 0.8; filter: blur(5px); transform: translateX(-50%) scale(0.95); }
+  100% { opacity: 1; filter: blur(10px); transform: translateX(-50%) scale(1.05); }
+}
 
 /* FIX: chef image tidak punya white background, max-height cukup besar */
 #chef-img {
